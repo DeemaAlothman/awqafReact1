@@ -28,11 +28,11 @@ const DirectorateForm: React.FC<Props> = ({
         onSubmit={handleSubmit}
       >
         <h2 className="text-xl font-bold mb-4">
-          {initialData ? "Edit Directorate" : "Add Directorate"}
+          {initialData ? "تعديل المديرية" : "إضافة مديرية"}
         </h2>
 
         <label className="block mb-2">
-          Name:
+          الاسم:
           <input
             type="text"
             value={name}
@@ -43,7 +43,7 @@ const DirectorateForm: React.FC<Props> = ({
         </label>
 
         <label className="block mb-2">
-          Address:
+          العنوان:
           <input
             type="text"
             value={address}
@@ -53,7 +53,7 @@ const DirectorateForm: React.FC<Props> = ({
         </label>
 
         <label className="block mb-4">
-          Note:
+          ملاحظة:
           <input
             type="text"
             value={note}
@@ -68,13 +68,13 @@ const DirectorateForm: React.FC<Props> = ({
             className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
             onClick={onClose}
           >
-            Cancel
+            إلغاء
           </button>
           <button
             type="submit"
             className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
           >
-            Save
+            حفظ
           </button>
         </div>
       </form>

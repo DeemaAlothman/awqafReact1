@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Employee } from "../types/employee";
 
 // مثال في أي ملف API
 const BASE =
@@ -47,3 +48,38 @@ export const getEmployeeById = async (id: number) => {
   const { data } = await axios.get(`${BASE}/employees/${id}`);
   return data;
 };
+
+
+export const getEmployeesByDirectorate = async (
+  directorateId: number
+): Promise<Employee[]> => {
+  const res = await axios.get(`${BASE}/employees/directorate/${directorateId}`);
+  return res.data;
+};
+
+// 🟢 جلب الموظفين حسب الدائرة
+export const getEmployeesByDepartment = async (
+  departmentId: number
+): Promise<Employee[]> => {
+  const res = await axios.get(`${BASE}/employees/department/${departmentId}`);
+  return res.data;
+};
+
+// 🟢 جلب الموظفين حسب الشعبة
+export const getEmployeesByDivision = async (divisionId: number) => {
+  const res = await axios.get(`${BASE}/employees/division/${divisionId}`);
+  return res.data;
+};
+
+
+// 🟢 جلب الموظفين حسب المكتب
+export const getEmployeesByOffice = async (
+  officeId: number
+): Promise<Employee[]> => {
+  const res = await axios.get(`${BASE}/employees/office/${officeId}`);
+  return res.data;
+};
+
+
+
+

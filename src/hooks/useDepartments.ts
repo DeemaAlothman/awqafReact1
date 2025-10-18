@@ -31,9 +31,13 @@ export const useDepartments = (directorateId?: number) => {
     fetchDepartments();
   }, [fetchDepartments]);
 
-  const addDepartment = async (name: string, note?: string) => {
-    if (!directorateId) return;
-    await createDepartment({ name, directorateId, note });
+  // ✅ تعديل هذه الدالة
+  const addDepartment = async (payload: {
+    name: string;
+    note?: string;
+    directorateId: number;
+  }) => {
+    await createDepartment(payload);
     await fetchDepartments();
   };
 

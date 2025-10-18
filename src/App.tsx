@@ -7,6 +7,7 @@ import DepartmentPage from "./pages/DepartmentPage";
 import DivisionPage from "./pages/DivisionPage";
 import OfficePage from "./pages/OfficePage"; // ✅ جديد
 import EmployeePage from "./pages/EmployeePage";
+import OrganizationTree from "./pages/OrganizationTree";
 
 const Loading: React.FC = () => (
   <div className="min-h-screen grid place-items-center bg-gray-50">
@@ -38,6 +39,7 @@ const App: React.FC = () => {
             {/* ✅ جديد */}
             <Route path="/employees/:id" element={<EmployeePage />} />
             <Route path="/home" element={<Navigate to="/" replace />} />
+            <Route path="/organization-tree" element={<OrganizationTree />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

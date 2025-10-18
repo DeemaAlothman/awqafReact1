@@ -27,4 +27,5 @@ export interface Department {
   name: string;
   note?: string;
   divisions: Division[];
+  employees?: Employee[]; // ✅ أضفناها
 }

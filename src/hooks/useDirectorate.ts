@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+// src/hooks/useDirectorate.ts
+import { useEffect, useState, useCallback } from "react";
 import { Directorate } from "../types/directorate";
-import { getDirectorate } from "../api/directorate";
+import { getDirectorate, createOrUpdateDirectorate } from "../api/directorate";
 
 export const useDirectorate = () => {
   const [directorate, setDirectorate] = useState<Directorate | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchDirectorate = async () => {
+  const fetchDirectorate = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await getDirectorate();
       setDirectorate(data);
@@ -15,11 +17,23 @@ export const useDirectorate = () => {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  // دالة للتعديل/إنشاء المديرية
+  const updateDirectorate = async (data: Partial<Directorate>) => {
+    try {
+      const updated = await createOrUpdateDirectorate(data);
+      setDirectorate(updated); // تحديث الstate مباشرة
+      return updated;
+    } catch (err) {
+      console.error("Error updating directorate:", err);
+      throw err;
+    }
   };
 
   useEffect(() => {
     fetchDirectorate();
-  }, []);
+  }, [fetchDirectorate]);
 
-  return { directorate, loading, fetchDirectorate };
+  return { directorate, loading, fetchDirectorate, updateDirectorate };
 };
