@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,8 +10,11 @@ import {
   ChevronUp,
   Loader2,
   ArrowRight,
+  Download,
+  FileText,
 } from "lucide-react";
 import { useDirectorate } from "../hooks/useDirectorate";
+import { usePDF } from "../hooks/usePDF";
 import { getDepartmentsByDirectorate } from "../api/department";
 import {
   getEmployeesByDirectorate,
@@ -26,6 +28,7 @@ import { Employee } from "../types/employee";
 const OrganizationTree: React.FC = () => {
   const navigate = useNavigate();
   const { directorate, loading: dirLoading } = useDirectorate();
+  const { downloadPDF, loading: pdfLoading, error: pdfError } = usePDF();
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>(
     {}
   );
@@ -34,6 +37,7 @@ const OrganizationTree: React.FC = () => {
   const [employeesCache, setEmployeesCache] = useState<
     Record<string, Employee[]>
   >({});
+  const [showPdfSuccess, setShowPdfSuccess] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +55,14 @@ const OrganizationTree: React.FC = () => {
 
     fetchData();
   }, [directorate?.id]);
+
+  const handleDownloadPDF = async () => {
+    const success = await downloadPDF();
+    if (success) {
+      setShowPdfSuccess(true);
+      setTimeout(() => setShowPdfSuccess(false), 3000);
+    }
+  };
 
   const fetchEmployees = async (type: string, id: number) => {
     const cacheKey = `${type}-${id}`;
@@ -197,7 +209,6 @@ const OrganizationTree: React.FC = () => {
     );
   };
 
-  // حساب عرض كل مستوى
   const CARD_WIDTH = 240;
   const MIN_SPACING = 80;
 
@@ -433,7 +444,43 @@ const OrganizationTree: React.FC = () => {
             <ArrowRight className="w-5 h-5" />
             <span className="font-medium">رجوع</span>
           </button>
+
+          {/* زر تحميل PDF */}
+          <button
+            onClick={handleDownloadPDF}
+            disabled={pdfLoading}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl shadow-lg hover:shadow-xl hover:from-emerald-600 hover:to-teal-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+          >
+            {pdfLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>جارِ التحميل...</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-5 h-5" />
+                <span>تحميل PDF</span>
+                <FileText className="w-5 h-5" />
+              </>
+            )}
+          </button>
         </div>
+
+        {/* رسالة نجاح التحميل */}
+        {showPdfSuccess && (
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-xl text-center">
+            <p className="text-green-700 font-medium">
+              ✓ تم تحميل ملف PDF بنجاح
+            </p>
+          </div>
+        )}
+
+        {/* رسالة خطأ */}
+        {pdfError && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-center">
+            <p className="text-red-700 font-medium">{pdfError}</p>
+          </div>
+        )}
 
         <div className="text-center">
           <h1 className="text-4xl font-bold text-slate-800 mb-3">
